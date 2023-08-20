@@ -14,7 +14,9 @@ export const MainLayout = () => {
   return (
     <div className="h-screen flex flex-col bg-gray-100 text-gray-700 font-mono text-xl font-bold text-center">
       <Header />
-      <Outlet />
+      <main className="flex min-h-screen flex-col items-center justify-between p-10">
+        <Outlet />
+      </main>
     </div>
   );
 };
