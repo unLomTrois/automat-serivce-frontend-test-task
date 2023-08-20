@@ -3,9 +3,10 @@ import { Note } from "../../types/Note";
 import { useNotes } from "../../hooks/useNotes";
 import { DateTime } from "luxon";
 import { api } from "../../api";
+import { Loader } from "../../components/Loader";
 
 // shows a list with flex elements
-export const NoteListPage = () => {
+export const NotesPage = () => {
   const navigate = useNavigate();
 
   return (
@@ -21,26 +22,21 @@ export const NoteListPage = () => {
           Экспорт
         </button>
       </div>
-      <table className="table-auto text-left w-full">
-        <thead>
-          <tr>
-            <th>Заголовок</th>
-            <th>Описание</th>
-            <th>Дата создания</th>
-            <th>Действия</th>
-          </tr>
-        </thead>
-        <NoteList />
-      </table>
+      <NoteTable />
     </div>
   );
 };
 
-const NoteList = () => {
+const NoteTable = () => {
   const { data: notes, isLoading, mutate } = useNotes();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-row gap-2 justify-center items-center w-full">
+        <Loader className="inline mr-3 text-white animate-spin w-10 h-10" />
+        <span>Загрузка заметок...</span>
+      </div>
+    );
   }
 
   const handleDelete = async (_id: string) => {
@@ -49,14 +45,32 @@ const NoteList = () => {
     });
   };
 
+  if (!notes.length) {
+    return (
+      <div className="flex flex-row gap-2 justify-center items-center w-full">
+        <span>Заметки отсутствуют</span>
+      </div>
+    )
+  }
+
   return (
-    <tbody>
-      {notes.map((note) => {
-        return (
-          <NoteItem key={note._id} note={note} handleDelete={handleDelete} />
-        );
-      })}
-    </tbody>
+    <table className="table-fixed text-left w-full">
+      <thead>
+        <tr>
+          <th>Заголовок</th>
+          <th>Описание</th>
+          <th>Дата создания</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {notes.map((note) => {
+          return (
+            <NoteItem key={note._id} note={note} handleDelete={handleDelete} />
+          );
+        })}
+      </tbody>
+    </table>
   );
 };
 
@@ -73,24 +87,26 @@ const NoteItem = ({
 
   return (
     <tr>
-      <td className="pt-5">
+      <td className="pt-5 overflow-hidden whitespace-nowrap text-overflow-ellipsis pr-5">
         <Link to={`/notes/${note._id}`}>{note.title}</Link>
       </td>
-      <td className="pt-5">{note.description}</td>
+      <td className="pt-5 overflow-hidden whitespace-nowrap text-overflow-ellipsis pr-5">
+        {note.description}
+      </td>
       <td className="pt-5">{date}</td>
       <td className="pt-5">
         <div className="flex flex-row gap-2">
           <button
-            className="bg-blue-500 p-1 rounded-md text-white"
+            className="bg-blue-500 px-2 py-1 rounded-md text-white"
             onClick={() => navigate(`/notes/${note._id}`)}
           >
-            Редактировать
+            <i className="fa-solid fa-pen-to-square fa-xs"></i>
           </button>
           <button
-            className="bg-red-500 p-1 rounded-md text-white"
+            className="bg-red-500 px-2 py-1 rounded-md text-white"
             onClick={() => handleDelete(note._id)}
           >
-            Delete
+            <i className="fa-solid fa-trash fa-xs"></i>
           </button>
         </div>
       </td>
