@@ -12,7 +12,7 @@ export const MainLayout = () => {
   console.log(me);
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100 text-gray-700 font-mono text-xl font-bold text-center">
+    <div className="flex flex-col text-gray-700 font-mono text-xl font-bold text-center">
       <Header />
       <main className="flex min-h-screen flex-col items-center justify-between p-10">
         <Outlet />
