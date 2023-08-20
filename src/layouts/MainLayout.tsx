@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import { Header } from "../components/Header";
+import { Toaster } from "react-hot-toast";
 
 export const MainLayout = () => {
   const { data: me, isLoading } = useUser();
@@ -17,6 +18,7 @@ export const MainLayout = () => {
       <main className="flex min-h-screen flex-col items-center justify-between p-10">
         <Outlet />
       </main>
+      <Toaster />
     </div>
   );
 };

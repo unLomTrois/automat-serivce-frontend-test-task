@@ -4,6 +4,7 @@ import { useNotes } from "../../hooks/useNotes";
 import { DateTime } from "luxon";
 import { api } from "../../api";
 import { Loader } from "../../components/Loader";
+import { toast } from "react-hot-toast";
 
 // shows a list with flex elements
 export const NotesPage = () => {
@@ -18,7 +19,10 @@ export const NotesPage = () => {
         >
           Создать
         </button>
-        <button className="bg-gray-500 p-1 rounded-md text-white line-through">
+        <button
+          className="bg-gray-500 p-1 rounded-md text-white line-through"
+          onClick={() => toast.error("Пока что недоступно", {position: "bottom-right"})}
+        >
           Экспорт
         </button>
       </div>
@@ -42,6 +46,7 @@ const NoteTable = () => {
   const handleDelete = async (_id: string) => {
     await api.client.delete(`/notes/${_id}`).then(() => {
       mutate();
+      toast.success("Заметка удалена", { position: "bottom-right" });
     });
   };
 
@@ -50,7 +55,7 @@ const NoteTable = () => {
       <div className="flex flex-row gap-2 justify-center items-center w-full">
         <span>Заметки отсутствуют</span>
       </div>
-    )
+    );
   }
 
   return (

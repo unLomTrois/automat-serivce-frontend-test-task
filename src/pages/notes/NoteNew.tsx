@@ -3,6 +3,7 @@ import { api } from "../../api";
 import { useState } from "react";
 import { HttpStatusCode } from "axios";
 import { Loader } from "../../components/Loader";
+import toast from "react-hot-toast";
 
 export type CreateNoteDto = {
   title: string;
@@ -25,10 +26,12 @@ export const NoteNew = () => {
 
     console.log(response.status);
     if (response.status === HttpStatusCode.Created) {
-      setTimeout(() => {
-        setLoading(false);
-        navigate(-1);
-      }, 1000);
+      setLoading(false);
+      navigate(-1);
+      toast.success("Заметка создана", { position: "bottom-right" });
+    } else {
+      toast.error("Ошибка создания заметки", { position: "bottom-right" });
+      navigate(-1);
     }
   };
 

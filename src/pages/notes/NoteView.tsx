@@ -3,6 +3,7 @@ import { useNote } from "../../hooks/useNotes";
 import { api } from "../../api";
 import { Loader } from "../../components/Loader";
 import useSWRMutation from "swr/mutation";
+import toast from "react-hot-toast";
 
 export const NoteView = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ export const NoteView = () => {
     await updateNote(form_data).then((res) => {
       console.log(res.status);
       navigate(-1);
+      toast.success("Заметка обновлена!", { position: "bottom-right" });
     });
   };
 
